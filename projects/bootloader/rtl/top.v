@@ -35,7 +35,7 @@
 
 module top (
 	// LEDs
-	output wire [2:0] led,
+	output wire [1:0] led,
 
 	// Button
 	input  wire btn,
@@ -215,7 +215,7 @@ module top (
 	);
 
 	// Peripheral [0] : Misc
-	soc_oc_r02_misc misc_I (
+	soc_ecp5_mini_misc misc_I (
 		.led(led),
 		.btn(btn),
 		.programn(programn),

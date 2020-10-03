@@ -33,9 +33,9 @@
 
 `default_nettype none
 
-module soc_oc_r02_misc (
+module soc_ecp5_mini_misc (
 	// LEDs
-	output wire [2:0] led,
+	output wire [1:0] led,
 
 	// Button
 	input  wire btn,
@@ -75,10 +75,10 @@ module soc_oc_r02_misc (
 	wire        btn_r;
 	wire        btn_val;
 
-	// LEDs (including LCD backlight)
-	reg   [2:0] led_ena;
+	// LEDs
+	reg   [1:0] led_ena;
 	reg   [8:0] led_pwm;
-	reg   [2:0] led_out;
+	reg   [1:0] led_out;
 
 	// Boot
 	reg   [7:0] boot_key;
@@ -179,7 +179,7 @@ module soc_oc_r02_misc (
 		// Each LED has an enable / disable and a 3 bit brightness
 
 	reg [5:0] pwm_cnt;
-	reg [2:0] pwm_map;
+	reg [1:0] pwm_map;
 
 	// PWM counter
 	always @(posedge clk)
@@ -198,12 +198,12 @@ module soc_oc_r02_misc (
 		if (pwm_cnt >= 6'h3f) pwm_map <= 3'd7;
 	end
 
-	for (i=0; i<3; i++)
+	for (i=0; i<2; i++)
 		always @(posedge clk)
 			led_out[i] <= led_ena[i] & (led_pwm[3*i+:3] >= pwm_map);
 
 	// Led output
-	assign led = led_out[2:0];
+	assign led = led_out[1:0];
 
 
 	// Reboot key
@@ -211,4 +211,4 @@ module soc_oc_r02_misc (
 
 	assign programn = (boot_key == 8'ha5) ? 1'b0 : 1'b1;
 
-endmodule // soc_oc_r02_misc
+endmodule // soc_ecp5_mini_misc
