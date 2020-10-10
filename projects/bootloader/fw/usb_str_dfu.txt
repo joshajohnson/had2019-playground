@@ -1,5 +1,5 @@
 0000000000000000
-NitroFPGA
+joshajohnson
 ECP5-Mini (no2bootloader DFU)
 DFU
 ECP5 bitstream

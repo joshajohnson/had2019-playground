@@ -1,5 +1,5 @@
 /*
- * soc_oc_r02_misc.v
+ * soc_ecp5_mini_misc.v
  *
  * vim: ts=4 sw=4
  *
@@ -128,7 +128,7 @@ module soc_ecp5_mini_misc (
 		else
 			bus_rdata <= bus_addr[0] ?
 				{ 23'd0, led_pwm } :
-				{ boot_key, 7'd0, btn_val, 13'd0, led_ena };
+				{ boot_key, 6'b0, btn_val, 14'b0, led_ena };
 
 
 	// Buttons
@@ -173,38 +173,33 @@ module soc_ecp5_mini_misc (
 		.rst(rst),
 	);
 
-
 	// LEDs
-	// ----
-		// Each LED has an enable / disable and a 3 bit brightness
-
-	reg [5:0] pwm_cnt;
-	reg [1:0] pwm_map;
-
-	// PWM counter
-	always @(posedge clk)
-		pwm_cnt <= pwm_cnt + 1;
-
-	// Map PWM counter to threshold value
-	always @(posedge clk)
-	begin
-		if (pwm_cnt >= 6'h00) pwm_map <= 3'd0;
-		if (pwm_cnt >= 6'h01) pwm_map <= 3'd1;
-		if (pwm_cnt >= 6'h05) pwm_map <= 3'd2;
-		if (pwm_cnt >= 6'h0c) pwm_map <= 3'd3;
-		if (pwm_cnt >= 6'h15) pwm_map <= 3'd4;
-		if (pwm_cnt >= 6'h20) pwm_map <= 3'd5;
-		if (pwm_cnt >= 6'h2e) pwm_map <= 3'd6;
-		if (pwm_cnt >= 6'h3f) pwm_map <= 3'd7;
+	// -------
+	
+	reg [24:0] counter = 0;
+    always @(posedge clk) begin
+        counter <= counter + 1;
 	end
 
-	for (i=0; i<2; i++)
-		always @(posedge clk)
-			led_out[i] <= led_ena[i] & (led_pwm[3*i+:3] >= pwm_map);
+	// Fade up / down to "heartbeat" LED
+    reg [5:0] dutyCycle = 0;
+	reg countUp = 1;
 
-	// Led output
-	assign led = led_out[1:0];
+    always @(posedge counter[18]) begin
+        if (dutyCycle == 1)
+            countUp <= 1;
+        else if (dutyCycle == 62)
+            countUp <= 0;
 
+        if (countUp)
+            dutyCycle <= dutyCycle + 1;
+        else
+            dutyCycle <= dutyCycle - 1;
+	end
+
+    // PWM Generator / Led output
+    assign led[1] = dutyCycle >= counter[15:10] ? 1 : 0;
+	assign led[0] = ~led[1];
 
 	// Reboot key
 	// ----------

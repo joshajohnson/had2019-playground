@@ -127,9 +127,9 @@ void main()
 #endif
 
 	/* Should we directly boot to app ? */
-	do_dfu |= btn_get();
+	do_dfu = btn_get();
 
-#if 0
+#if 1
 	if (!do_dfu)
 		reboot_now();
 #endif
