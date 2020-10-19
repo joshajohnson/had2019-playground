@@ -197,9 +197,11 @@ module soc_ecp5_mini_misc (
             dutyCycle <= dutyCycle - 1;
 	end
 
-    // PWM Generator / Led output
-    assign led[1] = dutyCycle >= counter[15:10] ? 1 : 0;
-	assign led[0] = ~led[1];
+    // LED_USR
+    assign led[0] = dutyCycle >= counter[15:10] ? 1 : 0;
+
+	// LED_ACT
+	assign led[1] = led_ena[1];
 
 	// Reboot key
 	// ----------

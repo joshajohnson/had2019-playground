@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include "spi.h"
+#include "misc.h"
 
 
 struct spi {
@@ -49,6 +50,9 @@ spi_xfer(unsigned cs, struct spi_xfer_chunk *xfer, unsigned n)
 	/* CS low */
 	spi_regs->csr &= ~(1 << (16+cs));
 
+	/* Transfer LED on */
+	led_on(1);
+
 	/* Run the chunks */
 	while (n--) {
 		for (int i=0; i<xfer->len; i++)
@@ -64,6 +68,9 @@ spi_xfer(unsigned cs, struct spi_xfer_chunk *xfer, unsigned n)
 		}
 		xfer++;
 	}
+
+	/* Transfor LED off */
+	led_off(1);
 
 	/* CS high */
 	spi_regs->csr |= (1 << (16+cs));
