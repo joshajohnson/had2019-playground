@@ -25,7 +25,8 @@ PROJ_TOP_SRC := rtl/top.v
 PROJ_TOP_MOD := top
 
 # Target config
-BOARD ?= ecp5-mini
+VERSION:= 0.2
+BOARD ?= ecp5-mini-${VERSION}
 DEVICE = 12k
 PACKAGE = CABGA256
 SPEEDGRADE = 8
