@@ -185,7 +185,7 @@ module soc_ecp5_mini_misc (
     reg [5:0] dutyCycle = 0;
 	reg countUp = 1;
 
-    always @(posedge counter[18]) begin
+    always @(posedge counter[17]) begin
         if (dutyCycle == 1)
             countUp <= 1;
         else if (dutyCycle == 62)
