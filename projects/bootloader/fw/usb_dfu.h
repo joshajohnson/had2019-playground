@@ -25,3 +25,4 @@
 
 void usb_dfu_cb_reboot(void);
 void usb_dfu_init(void);
+void _dfu_tick(void);
