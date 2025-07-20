@@ -29,6 +29,7 @@
 #include "usb_hw.h"
 #include "usb_priv.h"
 #include "usb.h"
+#include "usb_dfu.h"
 
 
 /* Main stack state */
