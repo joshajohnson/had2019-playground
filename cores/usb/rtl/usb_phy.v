@@ -131,8 +131,6 @@ module usb_phy #(
 				.Q1({rx_dp_i[1], rx_dn_i[1]}),
 			);
 
-`endif
-
 		end
 	endgenerate
 
